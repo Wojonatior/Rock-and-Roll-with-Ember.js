@@ -1,4 +1,3 @@
-<!-- app/templates/bands/band/songs.hbs -->
 <ul class="list-group songs">
 	<li class="list-group-item">
 		{{input type="text" class="new-song" placeholder="New song"
@@ -9,7 +8,8 @@
 	{{#each model.songs as |song|}}
 		<li class="list-group-item song">
 			{{song.title}}
-			<span class="rating pull-right">{{song.rating}}</span>
+			{{star-rating item=song rating=song.rating on-click=(action "updateRating")}}
+			{{!-- "on click" send the updateRating action --}}
 		</li>
 	{{/each}}
 </ul>
