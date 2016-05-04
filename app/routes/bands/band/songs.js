@@ -6,6 +6,10 @@ export default Ember.Route.extend({
 		return this.modelFor('bands.band');
 	},
 
+	resetController: function(controller) {
+		controller.set('songCreationStarted', false);
+	},
+
 	actions: {
 		createSong: function() {
 			var controller = this.get('controller');
@@ -22,6 +26,11 @@ export default Ember.Route.extend({
 				rating = params.rating;
 
 			song.set('rating', rating);
+		},
+
+		didTransition: function() {
+			var band = this.modelFor("bands.band");
+			document.title = `${band.get('name')} songs - Rock & Roll`;
 		}
 	}
 });
