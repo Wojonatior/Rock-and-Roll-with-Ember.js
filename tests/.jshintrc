@@ -21,7 +21,13 @@
     "andThen",
     "currentURL",
     "currentPath",
-    "currentRouteName"
+    "currentRouteName",
+    "currentRouteName",
+    "assertTrimmedText",
+    "assertLength",
+    "assertElement",
+    "selectBand",
+    "submit"
   ],
   "node": false,
   "browser": false,
