@@ -1,3 +1,5 @@
+// app/controllers/bands/band/songs.js
+
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
@@ -11,7 +13,11 @@ export default Ember.Controller.extend({
 			var song = params.item,
 				rating = params.rating;
 
+			if (song.get('rating') === rating) {
+				rating = 0;
+			}
 			song.set('rating', rating);
+			song.save();
 		},
 
 		enableSongCreation: function() {

@@ -1,3 +1,5 @@
+// app/controllers/bands/band/details.js
+
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
@@ -10,6 +12,7 @@ export default Ember.Controller.extend({
 
 		save: function() {
 			this.set('isEditing', false);
+			return true;
 		},
 		
 	}
