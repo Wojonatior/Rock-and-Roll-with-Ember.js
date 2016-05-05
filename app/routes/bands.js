@@ -1,6 +1,7 @@
 // app/routes/bands.js
 
 import Ember from 'ember';
+import wait from '../utils/wait';
 
 export default Ember.Route.extend({
 	model: function() {
