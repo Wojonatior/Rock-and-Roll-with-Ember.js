@@ -3,39 +3,39 @@ import Ember from 'ember';
 import { capitalize as capitalizeWords } from '../../../helpers/capitalize';
 
 export default Ember.Route.extend({
-	model: function() {
-		return this.modelFor('bands.band');
-	},
+    model() {
+        return this.modelFor('bands.band');
+    },
 
-	resetController: function(controller) {
-		controller.set('songCreationStarted', false);
-	},
+    resetController(controller) {
+        controller.set('songCreationStarted', false);
+    },
 
-	actions: {
-		createSong: function() {
-			var controller = this.get('controller');
-			var band = this.modelFor('bands.band');
-			
-			var song = this.store.createRecord('song', {
-				title: controller.get('title'),
-				band: band
-			});
-			song.save().then(function() {
-				controller.set('title', '');
-			});
-		},
+    actions: {
+        createSong() {
+            var controller = this.get('controller');
+            var band = this.modelFor('bands.band');
+            
+            var song = this.store.createRecord('song', {
+                title: controller.get('title'),
+                band: band
+            });
+            song.save().then(function() {
+                controller.set('title', '');
+            });
+        },
 
-		updateRating: function(params) {
-			var song = params.item,
-				rating = params.rating;
+        updateRating(params) {
+            var song = params.item,
+                rating = params.rating;
 
-			song.set('rating', rating);
-		},
+            song.set('rating', rating);
+        },
 
-		didTransition: function() {
-			var band = this.modelFor("bands.band");
-			var name = capitalizeWords(band.get('name'));
-			document.title = `${name} songs - Rock & Roll`;
-		}
-	}
+        didTransition() {
+            var band = this.modelFor("bands.band");
+            var name = capitalizeWords(band.get('name'));
+            document.title = `${name} songs - Rock & Roll`;
+        }
+    }
 });

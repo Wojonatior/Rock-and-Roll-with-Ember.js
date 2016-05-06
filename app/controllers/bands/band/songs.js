@@ -1,67 +1,68 @@
 // app/controllers/bands/band/songs.js
 import Ember from 'ember';
 import { capitalize } from '../../../helpers/capitalize';
+const {Controller, computed, isEmpty} = Ember;
 
 export default Ember.Controller.extend({
-	// Properties
-	title: '',
-	searchTerm: '',
-	songCreationStarted: false,
-	sortBy: 'ratingDesc',
-	queryParams: {
-		sortBy: 'sort',
-		searchTerm: 's',
-	},
+    // Properties
+    title: '',
+    searchTerm: '',
+    songCreationStarted: false,
+    sortBy: 'ratingDesc',
+    queryParams: {
+        sortBy: 'sort',
+        searchTerm: 's',
+    },
 
-	// Actions
-	actions: {
-		updateRating: function(song,rating) {
-			if (song.get('rating') === rating) {
-				rating = 0;
-			}
-			song.set('rating', rating);
-			song.save();
-		},
+    // Actions
+    actions: {
+        updateRating(params) {
+            let { item: song, rating } = params;
 
-		enableSongCreation: function() {
-			this.set('songCreationStarted', true);
-		},
-		
-		setSorting: function(option) {
-			this.set('sortBy', option);
-		}
-	},
+            if (song.get('rating') === rating) {
+                rating = 0;
+            }
+            song.set('rating', rating);
+            song.save();
+        },
 
-	// Computed Properties
-	isAddButtonDisabled: Ember.computed('title', function(){
-		return Ember.isEmpty(this.get('title'));
-	}),
+        enableSongCreation() {
+            this.set('songCreationStarted', true);
+        },
+        
+        setSorting(option) {
+            this.set('sortBy', option);
+        }
+    },
 
-	canCreateSong: Ember.computed('songCreationStarted', 'model.songs.length', function() {
-		return this.get('songCreationStarted') || this.get('model.songs.length');
-	}),
+    // Computed Properties
+    isAddButtonDisabled: Ember.computed.empty('title'),
 
-	sortProperties: Ember.computed('sortBy', function() {
-		var options = {
-			'ratingDesc': 'rating:desc,title:asc',
-			'ratingAsc': 'rating:asc,title:asc',
-			'titleDesc': 'title:desc',
-			'titleAsc': 'title:asc',
-		};
-		return options[this.get('sortBy')].split(',');
-	}),
+    canCreateSong: Ember.computed('songCreationStarted', 'model.songs.length', function() {
+        return this.get('songCreationStarted') || this.get('model.songs.length');
+    }),
 
-	sortedSongs: Ember.computed.sort('matchingSongs', 'sortProperties'),
+    sortProperties: Ember.computed('sortBy', function() {
+        var options = {
+            'ratingDesc': 'rating:desc,title:asc',
+            'ratingAsc': 'rating:asc,title:asc',
+            'titleDesc': 'title:desc',
+            'titleAsc': 'title:asc',
+        };
+        return options[this.get('sortBy')].split(',');
+    }),
 
-	matchingSongs: Ember.computed('model.songs.@each.title', 'searchTerm', function() {
-		var searchTerm = this.get('searchTerm').toLowerCase();
-		return this.get('model.songs').filter(function(song) {
-			return song.get('title').toLowerCase().indexOf(searchTerm) !== -1;
-		});
-	}),
+    sortedSongs: Ember.computed.sort('matchingSongs', 'sortProperties'),
 
-	newSongPlaceholder: Ember.computed('model.name', function() {
-		var bandName = this.get('model.name');
-		return `New ${capitalize(bandName)} song`;
-	}),
+    matchingSongs: Ember.computed('model.songs.@each.title', 'searchTerm', function() {
+        return this.get('model.songs').filter( (song) => {
+            const searchTerm = this.get('searchTerm').toLowerCase();
+            return song.get('title').toLowerCase().indexOf(searchTerm) !== -1;
+        });
+    }),
+
+    newSongPlaceholder: Ember.computed('model.name', function() {
+        var bandName = this.get('model.name');
+        return `New ${capitalize(bandName)} song`;
+    }),
 });
